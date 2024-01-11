@@ -1,0 +1,31 @@
+@tailwind components;
+@tailwind utilities;
+
+@import "../index";
+@import "../explore/explore.scss";
+
+.light-main-color {
+  background-color: $lightMainColor;
+}
+
+.light-sub-color {
+  background-color: $lightSubColor;
+}
+
+#analytics {
+  #bookings-number {
+    flex: 1 1 auto;
+  }
+
+  #average-success-booking-rate {
+    flex: 1 1 auto;
+  }
+
+  .stats-card {
+    flex: 1 1 auto;
+  }
+
+  #chart {
+    flex: 2 1 auto;
+  }
+}

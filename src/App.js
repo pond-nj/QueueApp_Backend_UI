@@ -1,9 +1,10 @@
 import "./App.css";
-import Sidebar from "./sidebar";
+import SideBar from "./SideBar";
 
 import ErrorPage from "./error-page";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-import Home from "./home/Home";
+import Explore from "./explore/Explore";
+import Analytics from "./analytics/Analytics";
 
 function App() {
   const router = createBrowserRouter([
@@ -11,7 +12,7 @@ function App() {
       path: "",
       element: (
         <>
-          <Sidebar />
+          <SideBar />
           <div id="sub-page">
             <Outlet />
           </div>
@@ -19,8 +20,9 @@ function App() {
       ),
       errorElement: <ErrorPage />,
       children: [
-        { path: "/", element: <Home /> },
-        { path: "/notification", element: <h1>noti</h1> },
+        { path: "/explore", element: <Explore /> },
+        { path: "/", element: <Explore /> },
+        { path: "/analytics", element: <Analytics /> },
       ],
     },
   ]);

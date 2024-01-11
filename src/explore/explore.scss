@@ -1,0 +1,300 @@
+@import "../index";
+
+#explore-page {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  height: 100%;
+}
+
+#calendar {
+}
+
+#calendar-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: $largeFontSize;
+  font-weight: bold;
+}
+
+.left-right-button {
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0;
+  border: none;
+  border-width: 0;
+  box-shadow: none;
+  margin: 0;
+  background: transparent;
+  color: $subTextColor;
+}
+
+.left-right-button:hover {
+  box-shadow: none;
+  font-weight: 500%;
+  font-style: bold;
+  cursor: pointer;
+}
+
+#explore-header {
+}
+
+#week-select {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.date-button {
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0;
+  border: none;
+  border-width: 0;
+  box-shadow: none;
+  margin: 0;
+  background: transparent;
+  color: $darkTextColor;
+}
+
+.date-button:hover {
+  box-shadow: none;
+}
+
+.week-day-label {
+  color: $subDarkTextColor;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.week-date-label {
+  height: $normalFontSize + 1rem;
+  width: $normalFontSize + 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.selected-week-date {
+  border-radius: 100%;
+  background-color: $mainColor;
+  color: $mainTextcolor;
+  font-weight: bold;
+}
+
+.slot {
+  display: block;
+}
+
+#holder {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  min-height: 0;
+  height: 100%;
+  gap: 1rem;
+}
+
+$schedule-padding: 1.5rem;
+$schedule-padding-right: 1rem;
+
+#schedule {
+  flex: 1 1 auto;
+  background-color: $cardColor;
+  border-radius: 1rem;
+  padding-right: $schedule-padding-right;
+  display: flex;
+  flex-direction: column;
+}
+
+#schedule-header {
+  margin: 0;
+  padding: $schedule-padding;
+}
+
+#show-slots {
+  overflow: auto;
+  min-height: 0;
+}
+
+#details-holder {
+  flex: 2 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.slot-card {
+  cursor: pointer;
+  border-bottom: 1px solid $subDarkTextColor;
+  padding: $schedule-padding;
+
+  .arrow {
+    color: $mainColor;
+  }
+}
+
+.slot-card:hover {
+  background-color: $backgroundColorHover;
+  font-weight: bold;
+}
+
+.slot-card-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.slot-card-details {
+}
+
+#slot-details {
+  flex: 2 1 auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  #details-time {
+    font-size: $semiLargeFontSize;
+    font-weight: bold;
+  }
+
+  #booking-code-box {
+    font-size: $normalFontSize;
+    font-weight: bold;
+    padding: 1rem;
+    background-color: $subDarkBackgroundColor;
+
+    #booking-code {
+      font-size: $veryLargeFontSize;
+      letter-spacing: 1.5rem;
+      text-align: center;
+      color: $mainColor;
+    }
+
+    #cancel-booking-wrap {
+      text-align: right;
+      #cancel-booking {
+        font-size: $normalFontSize;
+        color: $mainColor;
+        background-color: transparent;
+        padding: 0;
+
+        :hover {
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+  #details-card-column {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    padding-top: 2rem;
+    #details-card-column-left {
+      flex: 1 1 auto;
+    }
+
+    #details-card-column-right {
+      flex: 1 1 auto;
+    }
+  }
+
+  #no-show-button {
+    margin-right: 1rem;
+  }
+}
+
+#cancel-prompt {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  position: fixed;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+
+  #prompt-card {
+    z-index: 2;
+    padding: 1rem;
+    width: 70vw;
+
+    #prompt-card-text {
+      text-align: left;
+      padding-bottom: 1rem;
+    }
+
+    #cancel-reason {
+      height: 5rem;
+      display: block;
+      width: 100%;
+      background-color: transparent;
+      border: 2px solid $mainColor;
+    }
+  }
+
+  #background-prompt {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+    position: fixed;
+    z-index: 1;
+  }
+}
+
+.stats {
+  flex: 1 1 auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  #stats-header {
+    padding-bottom: 1rem;
+    font-size: $normalFontSize;
+    font-weight: bold;
+  }
+
+  #stats-card-wrapper {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    gap: 0.5rem;
+    .stats-card {
+      @extend .card;
+      padding: 1rem;
+      background-color: $subDarkBackgroundColor;
+      flex: 1 1 auto;
+
+      display: flex;
+      flex-direction: column;
+
+      .stats-card-text {
+        font-size: $normalFontSize;
+      }
+
+      .stats-card-number {
+        flex: 1 1 auto;
+        text-align: center;
+        justify-content: center;
+        color: $mainColor;
+        font-size: $largeFontSize;
+        font-size: $veryLargeFontSize;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  }
+}

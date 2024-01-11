@@ -1,17 +1,20 @@
 import Calendar from "./Calendar";
-import "./home.css";
+import "./explore.scss";
 import { useState } from "react";
 import Schedule from "./Schedule";
 import SlotDetails from "./SlotDetails";
+import { useEffect } from "react";
+import Stats from "./Stats";
 
-export default function Home() {
+export default function Explore() {
   const todayDate = new Date();
   todayDate.setHours(0, 0, 0, 0);
   const [showDate, setShowDate] = useState(todayDate);
+  // TODO: change default
   const [showSlot, setShowSlot] = useState(null);
+
   return (
-    <div id="home-page">
-      <h1 id="home-header">Home</h1>
+    <div id="explore-page">
       <Calendar
         todayDate={todayDate}
         setShowDate={setShowDate}
@@ -19,7 +22,10 @@ export default function Home() {
       />
       <div id="holder">
         <Schedule showDate={showDate} setShowSlot={setShowSlot} />
-        <SlotDetails showSlot={showSlot} />
+        <div id="details-holder">
+          <SlotDetails showSlot={showSlot} />
+          <Stats showSlot={showSlot} />
+        </div>
       </div>
     </div>
   );
