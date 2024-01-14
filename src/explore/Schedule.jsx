@@ -43,7 +43,7 @@ export default function Schedule({
 
     // 11 -> 11:00
     function parseTime(time) {
-      if (time.length === 4) return time;
+      if (time.length === 5) return time;
       else return `${time}:00`;
     }
 

@@ -16,6 +16,8 @@ function App() {
     return await fetch(`${BACKEND_URL}/shop/${SHOP_ID}/`)
       .then((res) => res.json())
       .then(async (res) => {
+        console.log("res", res);
+
         for (const ap of res.data.relationships.appointment_set.data) {
           await fetch(`${BACKEND_URL}/appointment/${ap.id}/`)
             .then((res) => res.json())
@@ -35,6 +37,8 @@ function App() {
               });
             });
         }
+
+        console.log("apLost", appointmentList);
 
         return appointmentList;
       });

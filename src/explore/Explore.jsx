@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import Stats from "./Stats";
 
 export default function Explore({ scheduleList, loaded }) {
+  console.log(scheduleList);
   const todayDate = new Date();
   todayDate.setHours(0, 0, 0, 0);
   const [showDate, setShowDate] = useState(todayDate);

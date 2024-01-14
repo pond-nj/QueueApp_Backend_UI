@@ -13,21 +13,30 @@ import { style } from "../style";
 export default function SlotDetails({ showSlot, loaded }) {
   const [showCancelPrompt, setShowCancelPrompt] = useState(false);
 
+  console.log(showSlot);
+
   function parseTime(time) {
-    if (time.length === 4) return time;
+    if (time.length === 5) return time;
     else return `${time}:00`;
   }
+
+  if (!showSlot)
+    return (
+      <div id="slot-details" className="card">
+        No Slot Selected
+      </div>
+    );
 
   const DetailsCard = () => {
     return (
       <>
         <div id="details-time" className="pb-4">
-          {parseTime(showSlot.start_time)} - {parseTime(showSlot.end_time)}
+          {parseTime(showSlot?.start_time)} - {parseTime(showSlot?.end_time)}
         </div>
         <div id="booking-code-box" className="card">
           <div>Booking code</div>
-          <div id="booking-code" className="tracking-[4rem]">
-            {showSlot.id.slice(0, 6)}
+          <div id="booking-code" className="tracking-[3rem]">
+            {/* {showSlot.id.slice(0, 6)} */}1 4 E R 8 Q
           </div>
           <div id="cancel-booking-wrap" className="footer-wrapper">
             <button
@@ -67,7 +76,7 @@ export default function SlotDetails({ showSlot, loaded }) {
             <div className="flex flex-row space-x-2 items-center">
               <Tag size="1.5rem" color={style.lightSubColor} weight="fill" />
               {/* <div>{showSlot.price}</div> */}
-              <div>$ 500</div>
+              <div>$ 150</div>
             </div>
 
             <div className="flex flex-row space-x-2 items-center">
