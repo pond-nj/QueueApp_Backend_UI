@@ -4,15 +4,17 @@ import { Chart } from "react-google-charts";
 import "./analytics.scss";
 import { useState } from "react";
 import { style } from "../style.js";
-import { StatsCards } from "../explore/Stats.jsx";
+import dayjs from "dayjs";
 
 function DatePickerWrap({ onChange }) {
+  const [value, setValue] = useState(dayjs());
+
   return (
     <DatePicker
       slotProps={{
         // Targets the `IconButton` component.
         openPickerButton: {
-          color: "primary",
+          style: { color: "#938fc7" },
         },
         // Targets the `InputAdornment` component.
         inputAdornment: {
@@ -20,7 +22,11 @@ function DatePickerWrap({ onChange }) {
         },
         textField: { size: "small", sx: { backgroundColor: "white" } },
       }}
-      onChange={onChange}
+      value={value}
+      onChange={(e) => {
+        setValue(e);
+        onChange(e);
+      }}
     />
   );
 }
@@ -30,16 +36,16 @@ function Header({ setFromDate, setToDate }) {
     <div id="analytics-header" className="mb-4">
       <div>Select time period to view analytics</div>
       <div className="flex flex-row justify-between">
-        <div>
+        <div className="flex flex-row space-x-1 content-center">
           <span>
             <DatePickerWrap onChange={(date) => setFromDate(date)} />
           </span>
-          -
+          <span className="flex flex-col justify-center">&#8212;</span>
           <span>
             <DatePickerWrap onChange={(date) => setToDate(date)} />
           </span>
         </div>
-        <div className="flex flex-row gap-1">
+        <div className="flex flex-row space-x-4">
           <button className="border-button">Today</button>
           <button className="border-button">This Week</button>
           <button className="border-button">This month</button>
@@ -53,20 +59,20 @@ function Header({ setFromDate, setToDate }) {
 function CustomerNumber({ className }) {
   const data = [
     ["Task", "Hours per Day"],
-    ["New customers", 11],
-    ["Returning customers", 2],
+    ["New customers", 4],
+    ["Returning customers", 11],
   ];
   return (
     <div id="customer-number" className={`card ${className} flex flex-col`}>
-      <div>Number of customer</div>
-      <div className="min-h-0">
+      <div className="text-lg font-bold">Number of customer</div>
+      <div className="min-h-0 flex-1">
         <Chart
           chartType="PieChart"
           data={data}
           className="height-100"
           options={{
             pieSliceText: "none",
-            pieHole: 0.4,
+            pieHole: 0.6,
             is3D: false,
             legend: "none",
             slices: {
@@ -76,16 +82,20 @@ function CustomerNumber({ className }) {
             backgroundColor: "transparent",
             chartArea: {
               top: "10%",
-              height: "50%",
+              height: "70%",
             },
           }}
         />
       </div>
-      <div className="flex flex-row gap-1 justify-center items-center">
-        <div className="light-main-color w-3 h-3 inline-block rounded"></div>
-        <span>New customers</span>
-        <div className="light-sub-color w-3 h-3 inline-block rounded"></div>
-        <span>Returning customers</span>
+      <div className="flex flex-row space-x-4 justify-center">
+        <div className="flex flex-row justify-center items-center space-x-2">
+          <span className="bg-light-sub-color w-6 h-6 inline-block rounded-lg"></span>
+          <span>New customers</span>
+        </div>
+        <div className="flex flex-row justify-center items-center space-x-2">
+          <span className="bg-light-main-color w-6 h-6 inline-block rounded-lg"></span>
+          <span>Returning customers</span>
+        </div>
       </div>
     </div>
   );
@@ -111,25 +121,21 @@ function DayOccupancy({ className }) {
 
   return (
     <div id="day-occupancy" className={`card ${className} flex flex-col`}>
-      <div className="">Day occupancy</div>
-      <div className="min-h-0">
+      <div className="text-lg font-bold">Day occupancy</div>
+      <div className="min-h-0 flex-1">
         <Chart
           chartType="ColumnChart"
           data={data}
           options={{
-            chartArea: {
-              // leave room for y-axis labels
-              width: "100%",
-            },
             bar: { groupWidth: "50%" },
             legend: { position: "none" },
             backgroundColor: "transparent",
             colors: [style.lightSubColor],
             chartArea: {
               top: "10%",
-              height: "40%",
               width: "90%",
             },
+            vAxis: { title: "No. of customers" },
           }}
         />
       </div>
@@ -138,7 +144,21 @@ function DayOccupancy({ className }) {
 }
 
 function PopularVisitTime({ className }) {
-  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const times = [
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+  ];
 
   const data = [
     [
@@ -152,13 +172,13 @@ function PopularVisitTime({ className }) {
         calc: "stringify",
       },
     ],
-    ...days.map((day, index) => [day, index, null, null]),
+    ...times.map((day, index) => [day, index, null, null]),
   ];
 
   return (
-    <div id="popular-visit-time" className={`card ${className}`}>
-      <div>Popular time of visit</div>
-      <div>
+    <div id="popular-visit-time" className={`card ${className} flex flex-col`}>
+      <div className="text-lg font-bold">Popular time of visit</div>
+      <div className="flex-1">
         <Chart
           chartType="ColumnChart"
           data={data}
@@ -169,9 +189,9 @@ function PopularVisitTime({ className }) {
             colors: [style.lightSubColor],
             chartArea: {
               top: "10%",
-              height: "40%",
               width: "90%",
             },
+            vAxis: { title: "No. of customers" },
           }}
         />
       </div>
@@ -181,26 +201,59 @@ function PopularVisitTime({ className }) {
 
 function BookingsNumber({ className }) {
   const data = [
-    ["Year", "Sales", "Expenses"],
-    ["2013", 1000, 400],
-    ["2014", 1170, 460],
-    ["2015", 660, 1120],
-    ["2016", 1030, 540],
+    ["Date", "Sales"],
+    ["10/31", 1000],
+    ["11/01", 1170],
+    ["11/02", 660],
+    ["11/03", 1030],
+    ["11/04", 1170],
+    ["11/05", 660],
+    ["11/06", 1030],
+    ["11/07", 1170],
+    ["11/08", 660],
+    ["11/09", 1030],
+    ["11/10", 1170],
+    ["11/11", 660],
+    ["11/12", 1030],
   ];
 
   const options = {
     legend: { position: "none" },
     label: { position: "none" },
-    chartArea: { height: "40%", top: "10%" },
+    chartArea: { top: "20%", right: "5%", left: "10%" },
     backgroundColor: "transparent",
     colors: [style.lightSubColor],
+    vAxis: { title: "in Thousands (US$)" },
+    hAxis: { title: "Forcast dates" },
+    curveType: "function",
   };
 
   return (
-    <div id="bookings-number" className={`card ${className}`}>
-      <div>Number of bookings</div>
-      <div>
+    <div id="bookings-number" className={`card ${className} flex flex-col`}>
+      <div className="text-lg font-bold">Number of bookings</div>
+
+      <div className="flex-1">
         <Chart chartType="AreaChart" data={data} options={options} />
+      </div>
+      {/* </div> */}
+    </div>
+  );
+}
+
+function StatsCards({ className }) {
+  return (
+    <div id="stats-card-wrapper" className={className}>
+      <div className="stats-card">
+        <div className="stats-card-text">Success rate</div>
+        <span className="stats-card-number">95%</span>
+      </div>
+      <div className="stats-card">
+        <div className="stats-card-text">No show bookings</div>
+        <span className="stats-card-number">5</span>
+      </div>
+      <div className="stats-card">
+        <div className="stats-card-text">Completed bookings</div>
+        <span className="stats-card-number">13</span>
       </div>
     </div>
   );
@@ -209,33 +262,44 @@ function BookingsNumber({ className }) {
 function AverageSuccessBookingRate({ className }) {
   // TODO: fix chart height and stats card height should be 2:1
   const data = [
-    ["City", "2010 Population", "2000 Population"],
-    ["New York City, NY", 8175000, 8008000],
-    ["Los Angeles, CA", 3792000, 3694000],
-    ["Chicago, IL", 2695000, 2896000],
-    ["Houston, TX", 2099000, 1953000],
-    ["Philadelphia, PA", 1526000, 1517000],
+    ["Weeks", "Cancelled/no show bookings", "Completed bookings"],
+    ["Week 1", 375, 600],
+    ["Week 2", 125, 625],
+    ["Week 3", 125, 375],
+    ["Week 4", 475, 200],
+    ["Week 5", 300, 350],
   ];
 
   const options = {
-    title: "Population of Largest U.S. Cities",
-    chartArea: { width: "80%", height: "30%" },
+    bar: { groupWidth: "20%" },
+    chartArea: { width: "80%", height: "70%", top: "20%" },
     isStacked: true,
     backgroundColor: "transparent",
     colors: [style.lightSubColor, style.lightMainColor],
+    legend: { position: "none" },
   };
   return (
     <div
       id="average-success-booking-rate"
-      className={`card ${className} stats`}
+      className={`card ${className} stats space-y-2`}
     >
-      <div>Average success booking rate</div>
-      <div className="flex flex-col min-h-0">
-        <StatsCards className="stats-card min-h-0" />
-        <div id="chart" className="min-h-0">
-          <Chart chartType="ColumnChart" data={data} options={options} />
+      <div className="text-lg font-bold">Average success booking rate</div>
+      {/* <div className="flex flex-col min-h-0 flex-1"> */}
+      <StatsCards className="stats-card min-h-0" />
+      <div id="chart" className="min-h-0 flex-1">
+        <Chart chartType="ColumnChart" data={data} options={options} />
+      </div>
+      <div className="flex flex-row space-x-4 justify-center">
+        <div className="flex flex-row justify-center items-center space-x-2">
+          <span className="bg-light-sub-color w-6 h-6 inline-block rounded-lg"></span>
+          <span>Completed bookings</span>
+        </div>
+        <div className="flex flex-row justify-center items-center space-x-2">
+          <span className="bg-light-main-color w-6 h-6 inline-block rounded-lg"></span>
+          <span>Cancelled/no show bookings</span>
         </div>
       </div>
+      {/* </div> */}
     </div>
   );
 }
@@ -249,7 +313,7 @@ export default function Analytics() {
       <Header setFromDate={setFromDate} setToDate={setToDate} />
       <div className="flex flex-row gap-2 min-h-0">
         <div className="flex flex-col gap-2 flex-[2] min-w-0">
-          <CustomerNumber className="flex-[3] min-h-0" />
+          <CustomerNumber className="flex-[2] min-h-0" />
           <DayOccupancy className="flex-[2] min-h-0" />
           <PopularVisitTime className="flex-[2] min-h-0" />
         </div>

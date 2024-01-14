@@ -1,4 +1,7 @@
+import { User } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useState } from "react";
+import { style } from "../style";
+import { Phone, Seal } from "@phosphor-icons/react";
 
 async function loadSchedule() {
   // const response = await fetch('http://localhost:3000/schedule');
@@ -21,6 +24,7 @@ async function loadSchedule() {
 }
 
 function SlotCard({ time, name, contact, type }) {
+  const iconSize = "1rem";
   return (
     <div className="slot-card">
       <div className="slot-card-header">
@@ -28,9 +32,20 @@ function SlotCard({ time, name, contact, type }) {
         <span className="arrow">&#8594;</span>
       </div>
       <div className="slot-card-details">
-        <div>{name}</div>
-        <div>{contact}</div>
-        <div>{type}</div>
+        <div className="flex flex-row space-x-4 items-center">
+          <User size={iconSize} color={style.lightSubColor} weight="fill" />
+          <div>{name}</div>
+        </div>
+
+        <div className="flex flex-row space-x-4 items-center">
+          <Phone size={iconSize} color={style.lightSubColor} weight="fill" />
+          <div>{contact}</div>
+        </div>
+
+        <div className="flex flex-row space-x-4 items-center">
+          <Seal size={iconSize} color={style.lightSubColor} weight="fill" />
+          <div>{type}</div>
+        </div>
       </div>
     </div>
   );

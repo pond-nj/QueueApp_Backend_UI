@@ -1,17 +1,27 @@
+import {
+  Note,
+  Percent,
+  Phone,
+  Seal,
+  Storefront,
+  Tag,
+  User,
+} from "@phosphor-icons/react";
 import { useState } from "react";
+import { style } from "../style";
 
 export default function SlotDetails({ showSlot }) {
   const [showCancelPrompt, setShowCancelPrompt] = useState(false);
-  console.log("outside", showSlot);
 
   const DetailsCard = () => {
-    console.log("inside", showSlot);
     return (
       <>
         <div id="details-time">{showSlot.time}</div>
         <div id="booking-code-box" className="card">
           <div>Booking code</div>
-          <div id="booking-code">{showSlot.bookingCode}</div>
+          <div id="booking-code" className="tracking-[4rem]">
+            {showSlot.bookingCode}
+          </div>
           <div id="cancel-booking-wrap" className="footer-wrapper">
             <button
               onClick={() => setShowCancelPrompt(true)}
@@ -23,16 +33,50 @@ export default function SlotDetails({ showSlot }) {
           </div>
         </div>
         <div id="details-card-column">
-          <div id="details-card-column-left">
-            <div>{showSlot.name}</div>
-            <div>{showSlot.contact}</div>
-            <div>{showSlot.remarks}</div>
+          <div id="details-card-column-left" className="space-y-2">
+            <div className="flex flex-row space-x-2 items-center">
+              <User size="1.5rem" color={style.lightSubColor} weight="fill" />
+              <div>{showSlot.name}</div>
+            </div>
+
+            <div className="flex flex-row space-x-2 items-center">
+              <Phone size="1.5rem" color={style.lightSubColor} weight="fill" />
+              <div>{showSlot.contact}</div>
+            </div>
+
+            <div className="flex flex-row space-x-2 items-center">
+              <Note size="1.5rem" color={style.lightSubColor} weight="fill" />
+              <div>{showSlot.remarks}</div>
+            </div>
           </div>
-          <div id="details-card-column-right">
-            <div>{showSlot.type}</div>
-            <div>{showSlot.price}</div>
-            <button className="border-button">Assign service provider</button>
-            <div>{showSlot.discount}</div>
+          <div id="details-card-column-right" className="space-y-2">
+            <div className="flex flex-row space-x-2 items-center">
+              <Seal size="1.5rem" color={style.lightSubColor} weight="fill" />
+              <div>{showSlot.type}</div>
+            </div>
+
+            <div className="flex flex-row space-x-2 items-center">
+              <Tag size="1.5rem" color={style.lightSubColor} weight="fill" />
+              <div>{showSlot.price}</div>
+            </div>
+
+            <div className="flex flex-row space-x-2 items-center">
+              <Storefront
+                size="1.5rem"
+                color={style.lightSubColor}
+                weight="fill"
+              />
+              <button className="border-button">Assign service provider</button>
+            </div>
+
+            <div className="flex flex-row space-x-2 items-center">
+              <Percent
+                size="1.5rem"
+                color={style.lightSubColor}
+                weight="fill"
+              />
+              <div>{showSlot.discount}</div>
+            </div>
           </div>
         </div>
 
@@ -45,8 +89,15 @@ export default function SlotDetails({ showSlot }) {
   };
 
   const CancelPrompt = () => {
+    const [text, setText] = useState("");
+
     function submit() {
       // TODO: submit cancelation
+    }
+
+    function textAreaAdjust(element) {
+      element.style.height = "1px";
+      element.style.height = 25 + element.scrollHeight + "px";
     }
 
     return (
@@ -56,11 +107,32 @@ export default function SlotDetails({ showSlot }) {
             <div id="prompt-card-text">
               Please provide a reason for canceling
             </div>
-            <input type="text" name="reason" id="cancel-reason" />
-            <button>confirm</button>
-          </form>
+            <div className="py-4">
+              <textarea
+                type="text"
+                name="reason"
+                id="cancel-reason"
+                value={text}
+                onChange={(event) => {
+                  setText(event.target.value);
+                }}
+                onKeyUp={(event) => {
+                  textAreaAdjust(event.target);
+                }}
+                className="text-black resize-none"
+              />
+            </div>
 
-          <button onClick={() => setShowCancelPrompt(false)}>cancel</button>
+            <div className="flex flex-row space-x-2 justify-end">
+              <button>confirm</button>
+              <div
+                onClick={() => setShowCancelPrompt(false)}
+                className="button"
+              >
+                cancel
+              </div>
+            </div>
+          </form>
         </div>
         <div id="background-prompt"></div>
       </div>

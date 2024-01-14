@@ -98,7 +98,7 @@
   gap: 1rem;
 }
 
-$schedule-padding: 1.5rem;
+$schedule-padding: 1rem;
 $schedule-padding-right: 1rem;
 
 #schedule {
@@ -170,7 +170,6 @@ $schedule-padding-right: 1rem;
 
     #booking-code {
       font-size: $veryLargeFontSize;
-      letter-spacing: 1.5rem;
       text-align: center;
       color: $mainColor;
     }
@@ -229,7 +228,6 @@ $schedule-padding-right: 1rem;
 
     #prompt-card-text {
       text-align: left;
-      padding-bottom: 1rem;
     }
 
     #cancel-reason {
@@ -288,8 +286,8 @@ $schedule-padding-right: 1rem;
         text-align: center;
         justify-content: center;
         color: $mainColor;
-        font-size: $largeFontSize;
         font-size: $veryLargeFontSize;
+        font-weight: bold;
 
         display: flex;
         flex-direction: column;
