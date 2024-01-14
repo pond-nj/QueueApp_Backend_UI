@@ -10,17 +10,24 @@ import {
 import { useState } from "react";
 import { style } from "../style";
 
-export default function SlotDetails({ showSlot }) {
+export default function SlotDetails({ showSlot, loaded }) {
   const [showCancelPrompt, setShowCancelPrompt] = useState(false);
+
+  function parseTime(time) {
+    if (time.length === 4) return time;
+    else return `${time}:00`;
+  }
 
   const DetailsCard = () => {
     return (
       <>
-        <div id="details-time">{showSlot.time}</div>
+        <div id="details-time" className="pb-4">
+          {parseTime(showSlot.start_time)} - {parseTime(showSlot.end_time)}
+        </div>
         <div id="booking-code-box" className="card">
           <div>Booking code</div>
           <div id="booking-code" className="tracking-[4rem]">
-            {showSlot.bookingCode}
+            {showSlot.id.slice(0, 6)}
           </div>
           <div id="cancel-booking-wrap" className="footer-wrapper">
             <button
@@ -36,28 +43,31 @@ export default function SlotDetails({ showSlot }) {
           <div id="details-card-column-left" className="space-y-2">
             <div className="flex flex-row space-x-2 items-center">
               <User size="1.5rem" color={style.lightSubColor} weight="fill" />
-              <div>{showSlot.name}</div>
+              <div>{showSlot.user.User_name}</div>
             </div>
 
             <div className="flex flex-row space-x-2 items-center">
               <Phone size="1.5rem" color={style.lightSubColor} weight="fill" />
-              <div>{showSlot.contact}</div>
+              <div>{showSlot.user.phone_number}</div>
             </div>
 
             <div className="flex flex-row space-x-2 items-center">
               <Note size="1.5rem" color={style.lightSubColor} weight="fill" />
-              <div>{showSlot.remarks}</div>
+              <div>
+                {showSlot.remark === "" ? showSlot.remark : "No Remark"}
+              </div>
             </div>
           </div>
           <div id="details-card-column-right" className="space-y-2">
             <div className="flex flex-row space-x-2 items-center">
               <Seal size="1.5rem" color={style.lightSubColor} weight="fill" />
-              <div>{showSlot.type}</div>
+              <div>{showSlot.service_name}</div>
             </div>
 
             <div className="flex flex-row space-x-2 items-center">
               <Tag size="1.5rem" color={style.lightSubColor} weight="fill" />
-              <div>{showSlot.price}</div>
+              {/* <div>{showSlot.price}</div> */}
+              <div>$ 500</div>
             </div>
 
             <div className="flex flex-row space-x-2 items-center">
@@ -75,7 +85,8 @@ export default function SlotDetails({ showSlot }) {
                 color={style.lightSubColor}
                 weight="fill"
               />
-              <div>{showSlot.discount}</div>
+              {/* <div>{showSlot.discount}</div> */}
+              <div>Save 15%</div>
             </div>
           </div>
         </div>
@@ -87,6 +98,8 @@ export default function SlotDetails({ showSlot }) {
       </>
     );
   };
+
+  console.log(showSlot);
 
   const CancelPrompt = () => {
     const [text, setText] = useState("");
@@ -141,7 +154,7 @@ export default function SlotDetails({ showSlot }) {
 
   return (
     <div id="slot-details" className="card">
-      {showSlot === null ? <div>Loading</div> : <DetailsCard />}
+      {!loaded ? <div>Loading</div> : <DetailsCard />}
       {showCancelPrompt ? <CancelPrompt /> : null}
     </div>
   );

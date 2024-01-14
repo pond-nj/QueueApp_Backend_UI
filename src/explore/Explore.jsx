@@ -6,12 +6,12 @@ import SlotDetails from "./SlotDetails";
 import { useEffect } from "react";
 import Stats from "./Stats";
 
-export default function Explore() {
+export default function Explore({ scheduleList, loaded }) {
   const todayDate = new Date();
   todayDate.setHours(0, 0, 0, 0);
   const [showDate, setShowDate] = useState(todayDate);
   // TODO: change default
-  const [showSlot, setShowSlot] = useState(null);
+  const [showSlot, setShowSlot] = useState(scheduleList[0]);
 
   return (
     <div id="explore-page">
@@ -21,10 +21,15 @@ export default function Explore() {
         showDate={showDate}
       />
       <div id="holder">
-        <Schedule showDate={showDate} setShowSlot={setShowSlot} />
-        <div id="details-holder">
-          <SlotDetails showSlot={showSlot} />
-          <Stats showSlot={showSlot} />
+        <Schedule
+          showDate={showDate}
+          setShowSlot={setShowSlot}
+          scheduleList={scheduleList}
+          loaded={loaded}
+        />
+        <div id="details-holder" className="flex flex-col space-y-2">
+          {loaded ? <SlotDetails showSlot={showSlot} loaded={loaded} /> : null}
+          <Stats scheduleList={scheduleList} />
         </div>
       </div>
     </div>

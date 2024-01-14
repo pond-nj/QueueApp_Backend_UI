@@ -240,26 +240,7 @@ function BookingsNumber({ className }) {
   );
 }
 
-function StatsCards({ className }) {
-  return (
-    <div id="stats-card-wrapper" className={className}>
-      <div className="stats-card">
-        <div className="stats-card-text">Success rate</div>
-        <span className="stats-card-number">95%</span>
-      </div>
-      <div className="stats-card">
-        <div className="stats-card-text">No show bookings</div>
-        <span className="stats-card-number">5</span>
-      </div>
-      <div className="stats-card">
-        <div className="stats-card-text">Completed bookings</div>
-        <span className="stats-card-number">13</span>
-      </div>
-    </div>
-  );
-}
-
-function AverageSuccessBookingRate({ className }) {
+function AverageSuccessBookingRate({ className, scheduleList }) {
   // TODO: fix chart height and stats card height should be 2:1
   const data = [
     ["Weeks", "Cancelled/no show bookings", "Completed bookings"],
@@ -270,6 +251,41 @@ function AverageSuccessBookingRate({ className }) {
     ["Week 5", 300, 350],
   ];
 
+  const cancelCount = 0;
+  console.log(scheduleList);
+
+  const now = new Date();
+
+  function StatsCards({ className }) {
+    return (
+      <div id="stats-card-wrapper" className={className}>
+        <div className="stats-card">
+          <div className="stats-card-text">Success rate</div>
+          <span className="stats-card-number">
+            {((scheduleList.length - cancelCount) / scheduleList.length) * 100}%
+          </span>
+        </div>
+        <div className="stats-card">
+          <div className="stats-card-text">No show bookings</div>
+          <span className="stats-card-number">{cancelCount}</span>
+        </div>
+        <div className="stats-card">
+          <div className="stats-card-text">Completed bookings</div>
+          <span className="stats-card-number">
+            {/* TODO: Time */}
+            {scheduleList.filter((s) => {
+              const date = new Date(
+                s.date + "T" + s.end_time
+              ).toLocaleDateString();
+              console.log(date);
+              return now < date;
+            })}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   const options = {
     bar: { groupWidth: "20%" },
     chartArea: { width: "80%", height: "70%", top: "20%" },
@@ -278,10 +294,11 @@ function AverageSuccessBookingRate({ className }) {
     colors: [style.lightSubColor, style.lightMainColor],
     legend: { position: "none" },
   };
+
   return (
     <div
       id="average-success-booking-rate"
-      className={`card ${className} stats space-y-2`}
+      className={`card ${className} stats space-y-2 flex-1`}
     >
       <div className="text-lg font-bold">Average success booking rate</div>
       {/* <div className="flex flex-col min-h-0 flex-1"> */}
@@ -304,7 +321,7 @@ function AverageSuccessBookingRate({ className }) {
   );
 }
 
-export default function Analytics() {
+export default function Analytics({ scheduleList }) {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
 
@@ -319,7 +336,10 @@ export default function Analytics() {
         </div>
         <div className="flex flex-col gap-2 flex-[3] min-w-0">
           <BookingsNumber className="flex-1 min-h-0" />
-          <AverageSuccessBookingRate className="flex-1 min-h-0" />
+          <AverageSuccessBookingRate
+            className="flex-1 min-h-0"
+            scheduleList={scheduleList}
+          />
         </div>
       </div>
     </div>

@@ -2,26 +2,7 @@ import { User } from "@phosphor-icons/react/dist/ssr";
 import { useEffect, useState } from "react";
 import { style } from "../style";
 import { Phone, Seal } from "@phosphor-icons/react";
-
-async function loadSchedule() {
-  // const response = await fetch('http://localhost:3000/schedule');
-  // const data = await response.json();
-  // return data;
-
-  const data = [];
-  for (let i = 0; i < 14; i++)
-    data.push({
-      name: "Vicky",
-      contact: "1234-5678",
-      remarks: "no-remark",
-      type: "haircut",
-      price: "$10",
-      time: "10:00 - 11.00",
-      discount: "15%",
-      bookingCode: "14ER8Q",
-    });
-  return data;
-}
+import { BACKEND_URL, SHOP_ID } from "../demoConfig";
 
 function SlotCard({ time, name, contact, type }) {
   const iconSize = "1rem";
@@ -51,31 +32,42 @@ function SlotCard({ time, name, contact, type }) {
   );
 }
 
-export default function Schedule({ showDate, setShowSlot }) {
-  const [loaded, setLoaded] = useState(false);
-  const [scheduleList, setScheduleList] = useState([]);
-
-  useEffect(() => {
-    loadSchedule().then((data) => {
-      setLoaded(true);
-      setScheduleList(data);
-      setShowSlot(data[0]);
-    });
-  }, [showDate]);
-
+export default function Schedule({
+  showDate,
+  setShowSlot,
+  scheduleList,
+  loaded,
+}) {
   function ScheduleSlots() {
     // TODO: last slot should not have border-bottom
+
+    // 11 -> 11:00
+    function parseTime(time) {
+      if (time.length === 4) return time;
+      else return `${time}:00`;
+    }
+
+    function parseDate(date) {
+      const dateObj = new Date(date);
+      const options = {
+        year: "2-digit",
+        month: "2-digit",
+        day: "numeric",
+      };
+      return dateObj.toLocaleDateString("en", options);
+    }
+
     return (
       <div id="show-slots">
         <div id="slots-holder">
-          {scheduleList.map((k, idx) => {
+          {scheduleList.map((ap) => {
             return (
               <SlotCard
-                time={"10:00 - " + (11 + idx) + ":00"}
-                key={idx}
-                name={"Vicky"}
-                contact={"1234-5678"}
-                type={"manicure and spa"}
+                time={`${parseTime(ap.start_time)} - ${parseTime(ap.end_time)}`}
+                key={ap.id}
+                name={ap.user.User_name}
+                contact={ap.user.phone_number}
+                type={ap.service_name}
               />
             );
           })}
