@@ -24,7 +24,12 @@ function findStartWeekDate(date) {
   return newStartDate;
 }
 
-export default function Calendar({ showDate, setShowDate, todayDate }) {
+export default function Calendar({
+  showDate,
+  setShowDate,
+  todayDate,
+  setShowSlot,
+}) {
   const [month, setMonth] = useState(0);
   const startDate = new Date();
   while (startDate.getDay() !== 0) {
@@ -46,8 +51,10 @@ export default function Calendar({ showDate, setShowDate, todayDate }) {
     "December",
   ];
 
+  const setDateWrap = (date) => {};
+
   const MonthSelect = () => {
-    const todayYear = todayDate.getFullYear();
+    const showYear = startCalendarDate.getFullYear();
     // TODO: when come back to the selected month, jump to the selected date
     function ButtonLeft() {
       if (month === 0) {
@@ -56,6 +63,7 @@ export default function Calendar({ showDate, setShowDate, todayDate }) {
         return (
           <LeftRightButton
             onClick={() => {
+              // TODO: allow month from Dec 2023 -> Jan 2024
               let newStartDate = new Date(startCalendarDate);
               newStartDate.setMonth(month - 1);
               newStartDate.setDate(1);
@@ -74,6 +82,7 @@ export default function Calendar({ showDate, setShowDate, todayDate }) {
         return <LeftRightButton right disabled />;
       } else {
         return (
+          // TODO: allow month from Dec 2023 <- Jan 2024
           <LeftRightButton
             onClick={() => {
               let newStartDate = new Date(startCalendarDate);
@@ -92,7 +101,7 @@ export default function Calendar({ showDate, setShowDate, todayDate }) {
     return (
       <div>
         <span>
-          {monthMapping[month]} {todayYear}
+          {monthMapping[month]} {showYear}
         </span>
         <ButtonLeft />
         <ButtonRight />
@@ -109,6 +118,7 @@ export default function Calendar({ showDate, setShowDate, todayDate }) {
             const newDate = new Date(startCalendarDate);
             newDate.setDate(startCalendarDate.getDate() - 7);
             setStartCalendarDate(newDate);
+            setMonth(newDate.getMonth());
           }}
         />
       );
@@ -122,11 +132,13 @@ export default function Calendar({ showDate, setShowDate, todayDate }) {
             const newDate = new Date(startCalendarDate);
             newDate.setDate(startCalendarDate.getDate() + 7);
             setStartCalendarDate(newDate);
+            setMonth(newDate.getMonth());
           }}
         />
       );
     }
 
+    // iterate to show days in a week
     const startCalendarDateList = [];
     for (let i = 0; i < 7; i++) {
       const newDate = new Date(startCalendarDate);
@@ -147,6 +159,7 @@ export default function Calendar({ showDate, setShowDate, todayDate }) {
               key={date.getTime()}
               onClick={() => {
                 setShowDate(date);
+                setShowSlot(null);
               }}
               className="date-button"
             >
@@ -176,6 +189,7 @@ export default function Calendar({ showDate, setShowDate, todayDate }) {
             setShowDate(todayDate);
             setStartCalendarDate(findStartWeekDate(todayDate));
             setMonth(todayDate.getMonth());
+            setShowSlot(null);
           }}
         >
           Today

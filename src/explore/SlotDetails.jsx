@@ -36,7 +36,7 @@ export default function SlotDetails({ showSlot, loaded }) {
         <div id="booking-code-box" className="card">
           <div>Booking code</div>
           <div id="booking-code" className="tracking-[3rem]">
-            {/* {showSlot.id.slice(0, 6)} */}1 4 E R 8 Q
+            {showSlot.id.slice(0, 6)}
           </div>
           <div id="cancel-booking-wrap" className="footer-wrapper">
             <button

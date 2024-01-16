@@ -1,22 +1,24 @@
-export function StatsCards({ className, scheduleList, today }) {
+export function StatsCards({ className, scheduleMap, today }) {
   const todayDate = new Date();
-  const todaySchedule = scheduleList?.filter((schedule) => {
-    const date = new Date(schedule.date);
-    return date.toLocaleDateString() === todayDate.toLocaleDateString();
-  });
+  const todaySchedule = scheduleMap[todayDate.toLocaleDateString()].filter(
+    (schedule) => {
+      const date = new Date(schedule.date);
+      return date.toLocaleDateString() === todayDate.toLocaleDateString();
+    }
+  );
 
   let stats;
   if (today) {
     stats = {
-      booked: scheduleList ? todaySchedule.length : 18,
-      cancelled: scheduleList ? 0 : 18,
-      completed: scheduleList ? todaySchedule.length : 13,
+      booked: scheduleMap ? todaySchedule.length : 18,
+      cancelled: scheduleMap ? 0 : 18,
+      completed: scheduleMap ? todaySchedule.length : 13,
     };
   } else {
     stats = {
-      booked: scheduleList.length,
+      booked: scheduleMap.length,
       cancelled: 0,
-      completed: scheduleList.length,
+      completed: scheduleMap.length,
     };
   }
 
@@ -38,15 +40,11 @@ export function StatsCards({ className, scheduleList, today }) {
   );
 }
 
-export default function Stats({ scheduleList }) {
+export default function Stats({ scheduleMap }) {
   return (
     <div className="card stats min-h-0">
       <div id="stats-header">Today statistics</div>
-      <StatsCards
-        className="flex-1 min-h-0"
-        scheduleList={scheduleList}
-        today
-      />
+      <StatsCards className="flex-1 min-h-0" scheduleMap={scheduleMap} today />
     </div>
   );
 }

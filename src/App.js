@@ -12,7 +12,7 @@ function App() {
   const [loaded, setLoaded] = useState(false);
 
   async function loadSchedule() {
-    const appointmentList = [];
+    const appointmentMap = {};
     return await fetch(`${BACKEND_URL}/shop/${SHOP_ID}/`)
       .then((res) => res.json())
       .then(async (res) => {
@@ -21,37 +21,44 @@ function App() {
         for (const ap of res.data.relationships.appointment_set.data) {
           await fetch(`${BACKEND_URL}/appointment/${ap.id}/`)
             .then((res) => res.json())
-            .then(async (data) => {
+            .then(async (apData) => {
               const user = await fetch(
-                `${BACKEND_URL}/user/${data.data.relationships.user.data.id}/`
+                `${BACKEND_URL}/user/${apData.data.relationships.user.data.id}/`
               )
                 .then((res) => res.json())
                 .then((data) => {
                   return data.data.attributes;
                 });
-
-              appointmentList.push({
-                ...data.data.attributes,
+              const apObj = {
+                ...apData.data.attributes,
                 user: user,
                 id: ap.id,
-              });
+              };
+
+              const date = new Date(
+                apData.data.attributes.date
+              ).toLocaleDateString();
+
+              if (apData.data.date in appointmentMap) {
+                appointmentMap[date].push(apObj);
+              } else {
+                appointmentMap[date] = [apObj];
+              }
             });
         }
 
-        console.log("apLost", appointmentList);
-
-        return appointmentList;
+        return appointmentMap;
       });
   }
+
+  const [scheduleMap, setScheduleMap] = useState([]);
 
   useEffect(() => {
     loadSchedule().then((data) => {
       setLoaded(true);
-      setScheduleList(data);
+      setScheduleMap(data);
     });
   }, []);
-
-  const [scheduleList, setScheduleList] = useState([]);
 
   const router = createBrowserRouter([
     {
@@ -69,18 +76,18 @@ function App() {
         {
           path: "/explore",
           element: loaded ? (
-            <Explore scheduleList={scheduleList} loaded={loaded} />
+            <Explore scheduleMap={scheduleMap} loaded={loaded} />
           ) : null,
         },
         {
           path: "/",
           element: loaded ? (
-            <Explore scheduleList={scheduleList} loaded={loaded} />
+            <Explore scheduleMap={scheduleMap} loaded={loaded} />
           ) : null,
         },
         {
           path: "/analytics",
-          element: loaded ? <Analytics scheduleList={scheduleList} /> : null,
+          element: loaded ? <Analytics scheduleMap={scheduleMap} /> : null,
         },
       ],
     },

@@ -240,7 +240,7 @@ function BookingsNumber({ className }) {
   );
 }
 
-function AverageSuccessBookingRate({ className, scheduleList }) {
+function AverageSuccessBookingRate({ className, scheduleMap }) {
   // TODO: fix chart height and stats card height should be 2:1
   const data = [
     ["Weeks", "Cancelled/no show bookings", "Completed bookings"],
@@ -252,7 +252,7 @@ function AverageSuccessBookingRate({ className, scheduleList }) {
   ];
 
   const cancelCount = 0;
-  console.log(scheduleList);
+  console.log(scheduleMap);
 
   const now = new Date();
 
@@ -262,7 +262,7 @@ function AverageSuccessBookingRate({ className, scheduleList }) {
         <div className="stats-card">
           <div className="stats-card-text">Success rate</div>
           <span className="stats-card-number">
-            {((scheduleList.length - cancelCount) / scheduleList.length) * 100}%
+            {((scheduleMap.length - cancelCount) / scheduleMap.length) * 100}%
           </span>
         </div>
         <div className="stats-card">
@@ -271,16 +271,7 @@ function AverageSuccessBookingRate({ className, scheduleList }) {
         </div>
         <div className="stats-card">
           <div className="stats-card-text">Completed bookings</div>
-          <span className="stats-card-number">
-            {/* TODO: Time */}
-            {scheduleList.filter((s) => {
-              const date = new Date(
-                s.date + "T" + s.end_time
-              ).toLocaleDateString();
-              console.log(date);
-              return now < date;
-            })}
-          </span>
+          <span className="stats-card-number">TODO </span>
         </div>
       </div>
     );
@@ -321,7 +312,7 @@ function AverageSuccessBookingRate({ className, scheduleList }) {
   );
 }
 
-export default function Analytics({ scheduleList }) {
+export default function Analytics({ scheduleMap }) {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
 
@@ -338,7 +329,7 @@ export default function Analytics({ scheduleList }) {
           <BookingsNumber className="flex-1 min-h-0" />
           <AverageSuccessBookingRate
             className="flex-1 min-h-0"
-            scheduleList={scheduleList}
+            scheduleMap={scheduleMap}
           />
         </div>
       </div>
